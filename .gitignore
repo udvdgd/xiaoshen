@@ -1,0 +1,12 @@
+__pycache__/
+*.pyc
+*.pyo
+*.xsn
+*.enc
+*.dec
+.DS_Store
+.xsn.awk
+test_dir/
+*.zip
+.idea/
+.vscode/

@@ -12,12 +12,15 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 
 def load():
     full = os.path.join(HERE, "vulns_full.json")
-    base = os.path.join(HERE, "vulns.json")
-    path = full if os.path.exists(full) else base
+    path = full if os.path.exists(full) else os.path.join(HERE, "vulns.json")
     with open(path, encoding="utf-8") as f:
-        data = json.load(f)
-    print(f"(读取: {os.path.basename(path)}, 共 {len(data['cves'])} 条)\n")
-    return data["cves"]
+        rows = json.load(f)["cves"]
+    lpe = os.path.join(HERE, "android_lpe.json")
+    if os.path.exists(lpe):
+        with open(lpe, encoding="utf-8") as f:
+            rows = rows + json.load(f)["cves"]
+    print(f"(共 {len(rows)} 条)\n")
+    return rows
 
 
 def row(v):

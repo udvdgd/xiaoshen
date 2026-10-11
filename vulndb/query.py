@@ -1,19 +1,28 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""小神漏洞库查询 — 只读检索公开 CVE 防御侧信息（不含利用代码）。
+"""小神漏洞库查询（只读）：list / search / show。
   python3 query.py list
   python3 query.py search log4j
   python3 query.py show CVE-2021-44228
 """
 import json, os, sys
-DB = os.path.join(os.path.dirname(os.path.abspath(__file__)), "vulns.json")
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+
 
 def load():
-    with open(DB, encoding="utf-8") as f:
-        return json.load(f)["cves"]
+    full = os.path.join(HERE, "vulns_full.json")
+    base = os.path.join(HERE, "vulns.json")
+    path = full if os.path.exists(full) else base
+    with open(path, encoding="utf-8") as f:
+        data = json.load(f)
+    print(f"(读取: {os.path.basename(path)}, 共 {len(data['cves'])} 条)\n")
+    return data["cves"]
+
 
 def row(v):
     return f"{v['id']:18} [{v['severity']:8}] {v['product']:22} {v['name']}"
+
 
 def main():
     if len(sys.argv) < 2:
@@ -41,6 +50,7 @@ def main():
         print("未找到")
     else:
         print(__doc__)
+
 
 if __name__ == "__main__":
     main()

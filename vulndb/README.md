@@ -1,25 +1,30 @@
 # 小神漏洞知识库（vulndb）
 
-收录著名公开 CVE 的**防御侧**信息：影响版本、风险点、如何检测、修复方案、官方参考。
-**只做知识整理与检测/修复指引，不含任何可直接利用的攻击代码或 PoC payload。**
+用于**安全演习/自查巡检**的公开 CVE 防御侧知识库：影响版本、风险点、检测、修复、官方参考。**不含攻击代码/PoC。**
 
-## 使用
+## 快速开始
 ```bash
-cd vulndb
-python3 query.py list                # 列出全部
-python3 query.py search log4j        # 按关键字搜
-python3 query.py show CVE-2021-44228 # 看某条详情
+python3 query.py list                 # 列出全部
+python3 query.py search log4j
+python3 query.py show CVE-2021-44228
 ```
 
-## 收录方向
-- Web 中间件：Struts2、Spring、Apache httpd、ActiveMQ、PHP-FPM
-- 边界设备：F5 BIG-IP、Citrix ADC、FortiGate
-- 协作套件：Confluence、Exchange、MOVEit
-- 操作系统/协议：SMBv1/v3、RDP、Netlogon、OpenSSL、Office/MSDT
-- 已 EOL 组件：Flash
+## 扩充到几千上万条（真实数据）
+精选种子 `vulns.json` 内置 21 条；用官方公开数据导入：
+```bash
+# 1) 从 https://nvd.nist.gov/vuln/data-feeds 下载 nvdcve-1.1-YYYY.json
+python3 import_feed.py nvd nvdcve-1.1-2024.json
+python3 import_feed.py generic my_list.json
+```
+生成 `vulns_full.json` 后 query.py 自动优先读取（几千~上万条）。
 
-## 字段
-id/name/product/affected/severity/summary/detect/remediate/ref(NVD)。
+## 文件
+| 文件 | 说明 |
+|---|---|
+| vulns.json | 精选种子（内置 21 条） |
+| vulns_full.json | 导入官方 Feed 后生成（不入库） |
+| import_feed.py | NVD/通用 JSON 导入器 |
+| query.py | list/search/show |
 
 ## 边界
-用于自查、巡检、教育；禁止未授权攻击。数据以厂商通告为准。
+用于自有环境安全演习/自查/教育；禁止未授权攻击；以厂商公告为准。

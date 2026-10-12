@@ -2,105 +2,16 @@
   "category": "android-local-privilege-escalation (防御侧情报)",
   "note": "仅记录公开 LPE 漏洞的影响面与修复指引；不含提权/root 利用代码。",
   "cves": [
-    {
-      "id": "CVE-2026-64560",
-      "name": "ColorOS17 临时 Root",
-      "product": "OPPO/OnePlus ColorOS (Android 17)",
-      "affected": "未打 2026-09 安全补丁的 ColorOS 17；社区反馈 2026-10 版本 16.0.1.600 仍存在可临时 root 的手法（待官方确认）",
-      "severity": "critical",
-      "summary": "Android 内核/系统组件本地提权，被打包为一键临时 root 工具广泛传播。",
-      "detect": "设置-关于本机查看补丁日期/版本号；若为 16.0.1.600 等社区反馈版本，按高风险对待。",
-      "remediate": "持续检查 OPPO/一加官方最新补丁并更新；不要安装来源不明的 root/提权工具；敏感应用（银行/支付）在修补前避免在此设备登录。",
-      "ref": "https://source.android.google.cn/docs/security/bulletin/",
-      "intel": "核实状态：该编号来自社区视频，NVD/OPPO 官方公告未公开列名；OPPO OSRC 已发 2026-10 补丁包（基于 Android 公告 2026-10），但未按此编号列明。16.0.1.600 是否仍受影响，以 OPPO 后续官方公告为准。"
-    },
-    {
-      "id": "CVE-2026-22078",
-      "name": "O+ 互联 IPC 提权",
-      "product": "OPPO O+ Connect（官方确认）",
-      "affected": "受影响 O+ 互联版本",
-      "severity": "high",
-      "summary": "O+ 互联 IPC 服务未做身份核验，外部应用可经 IPC 通道提权执行敏感行为（EOP）。",
-      "detect": "检查 O+ 互联应用版本是否为官方已修复版本。",
-      "remediate": "通过官方应用商店/系统更新升级到修复版本；关闭不需要的跨设备互联权限。",
-      "ref": "https://security.oppo.com/cn/noticeDetail?notice_only_key=20261779159022080"
-    },
-    {
-      "id": "CVE-2026-46242",
-      "name": "Bad Epoll",
-      "product": "Linux 内核 epoll (影响 Android/服务器/桌面)",
-      "affected": "受影响内核版本（race/UAF）",
-      "severity": "critical",
-      "summary": "epoll 子系统竞争条件 + UAF，本地提权到 root，可用于 Android 设备全权限接管。",
-      "detect": "内核版本在受影响范围且未打 2026-07 后补丁。",
-      "remediate": "更新内核/厂商安全补丁；限制不可信本地代码执行。",
-      "ref": "https://nvd.nist.gov/vuln/detail/CVE-2026-46242"
-    },
-    {
-      "id": "CVE-2026-49927",
-      "name": "Android System 整数溢出越界写",
-      "product": "Android System 组件",
-      "affected": "未打 2026-09 补丁的版本",
-      "severity": "high",
-      "summary": "System 组件整数溢出后用于内存写，越界写入，本地无需特权/无需交互即可提权。",
-      "detect": "系统补丁早于 2026-09。",
-      "remediate": "安装 2026-09 安全补丁。",
-      "ref": "https://avd.aliyun.com/detail?id=AVD-2026-49927"
-    },
-    {
-      "id": "CVE-2026-10702",
-      "name": "浏览器 RCE（链入口）",
-      "product": "Android 浏览器/WebView",
-      "affected": "未打补丁版本",
-      "severity": "high",
-      "summary": "网页入口 RCE，常与内核提权 CVE-2026-43499 组成远程 root 链。",
-      "detect": "浏览器/WebView 版本未更新。",
-      "remediate": "更新浏览器与 WebView 到最新版。",
-      "ref": "https://source.android.google.cn/docs/security/bulletin/"
-    },
-    {
-      "id": "CVE-2026-43499",
-      "name": "内核本地提权（链第二段）",
-      "product": "Android 内核",
-      "affected": "未打补丁内核",
-      "severity": "critical",
-      "summary": "从浏览器沙箱低权限进程继续打到内核提权；与 CVE-2026-10702 组合可远程 root。",
-      "detect": "内核补丁级别过旧。",
-      "remediate": "更新系统内核补丁。",
-      "ref": "https://source.android.google.cn/docs/security/bulletin/"
-    },
-    {
-      "id": "CVE-2025-48595",
-      "name": "Android Framework 提权",
-      "product": "Android Framework",
-      "affected": "受影响 Framework 版本",
-      "severity": "critical",
-      "summary": "Framework 组件权限提升 0day，可提权至系统权限。",
-      "detect": "系统补丁早于 2026 修复批次。",
-      "remediate": "安装最新 Android 安全更新。",
-      "ref": "https://nvd.nist.gov/vuln/detail/CVE-2025-48595"
-    },
-    {
-      "id": "CVE-2022-0847",
-      "name": "Dirty Pipe",
-      "product": "Linux 内核 (Android)",
-      "affected": "内核 5.8 ~ 5.16.11",
-      "severity": "high",
-      "summary": "pipe 缓冲区标志未正确复位，可覆写只读文件，本地提权/改系统文件。",
-      "detect": "内核版本在 5.8-5.16.10。",
-      "remediate": "升级内核补丁 5.10.102+ 等。",
-      "ref": "https://nvd.nist.gov/vuln/detail/CVE-2022-0847"
-    },
-    {
-      "id": "CVE-2016-5195",
-      "name": "Dirty COW",
-      "product": "Linux 内核 (Android)",
-      "affected": "长期受影响内核，经典提权",
-      "severity": "high",
-      "summary": "写时复制竞争条件，可改写只读内存，经典 Android 本地提权。",
-      "detect": "内核版本过旧。",
-      "remediate": "升级内核。",
-      "ref": "https://nvd.nist.gov/vuln/detail/CVE-2016-5195"
-    }
+    {"id": "CVE-2026-64560", "name": "ColorOS17 临时 Root", "product": "OPPO/OnePlus ColorOS (Android 17)", "affected": "未打 2026-09 补丁；社区反馈 16.0.1.600 仍可临时 root(待官方确认)", "severity": "critical", "summary": "系统本地提权，被打包为一键临时 root 工具传播。", "detect": "关于本机看补丁日期/版本；16.0.1.600 按高风险对待。", "remediate": "持续更新官方补丁；勿装来源不明 root 工具；修补前勿登录银行/支付。", "ref": "https://source.android.google.cn/docs/security/bulletin/", "intel": "该编号来自社区视频，NVD/OPPO 官方未列名；OPPO OSRC 已发 2026-10 补丁包但未按此编号列明。"},
+    {"id": "CVE-2026-22078", "name": "O+ 互联 IPC 提权", "product": "OPPO O+ Connect(官方确认)", "affected": "受影响 O+ 互联版本", "severity": "high", "summary": "O+ 互联 IPC 未做身份核验，外部应用可经 IPC 提权执行敏感行为。", "detect": "检查 O+ 互联版本是否为修复版。", "remediate": "升级 O+ 互联到修复版；关闭不需要的跨设备权限。", "ref": "https://security.oppo.com/cn/noticeDetail?notice_only_key=20261779159022080"},
+    {"id": "CVE-2026-46242", "name": "Bad Epoll", "product": "Linux 内核 epoll(Android/服务器)", "affected": "受影响内核版本", "severity": "critical", "summary": "epoll 竞争+UAF，本地提权 root。", "detect": "内核未打 2026-07 后补丁。", "remediate": "更新内核/厂商补丁。", "ref": "https://nvd.nist.gov/vuln/detail/CVE-2026-46242"},
+    {"id": "CVE-2026-49927", "name": "Android System 整数溢出", "product": "Android System 组件", "affected": "未打 2026-09 补丁", "severity": "high", "summary": "整数溢出越界写，本地提权。", "detect": "补丁早于 2026-09。", "remediate": "安装 2026-09 补丁。", "ref": "https://avd.aliyun.com/detail?id=AVD-2026-49927"},
+    {"id": "CVE-2026-10702", "name": "浏览器 RCE(链入口)", "product": "Android 浏览器/WebView", "affected": "未打补丁版本", "severity": "high", "summary": "网页入口 RCE，常与 43499 组远程 root 链。", "detect": "浏览器/WebView 未更新。", "remediate": "更新浏览器与 WebView。", "ref": "https://source.android.google.cn/docs/security/bulletin/"},
+    {"id": "CVE-2026-43499", "name": "内核提权(链第二段)", "product": "Android 内核", "affected": "未打补丁内核", "severity": "critical", "summary": "从沙箱低权限进程打到内核提权。", "detect": "内核补丁过旧。", "remediate": "更新内核补丁。", "ref": "https://source.android.google.cn/docs/security/bulletin/"},
+    {"id": "CVE-2025-48595", "name": "Framework 提权", "product": "Android Framework", "affected": "受影响版本", "severity": "critical", "summary": "Framework 权限提升 0day。", "detect": "补丁早于 2026 修复批次。", "remediate": "安装最新 Android 更新。", "ref": "https://nvd.nist.gov/vuln/detail/CVE-2025-48595"},
+    {"id": "CVE-2022-0847", "name": "Dirty Pipe", "product": "Linux 内核(Android)", "affected": "5.8~5.16.11", "severity": "high", "summary": "覆写只读文件提权。", "detect": "内核 5.8-5.16.10。", "remediate": "升级内核补丁。", "ref": "https://nvd.nist.gov/vuln/detail/CVE-2022-0847"},
+    {"id": "CVE-2016-5195", "name": "Dirty COW", "product": "Linux 内核(Android)", "affected": "长期受影响内核", "severity": "high", "summary": "写时复制竞争改写只读内存。", "detect": "内核过旧。", "remediate": "升级内核。", "ref": "https://nvd.nist.gov/vuln/detail/CVE-2016-5195"},
+    {"id": "CVE-2026-49933", "name": "蓝牙特权进程控制流劫持", "product": "Android Bluetooth (msft.cc)", "affected": "Android 14/15/16/16-qpr2/17 早于 2026-10-05 补丁", "severity": "high", "summary": "未初始化指针解引用，特权蓝牙进程控制流劫持，本地提权无需交互。", "detect": "系统补丁早于 2026-10-05。", "remediate": "安装 2026-10 补丁。", "ref": "https://nvd.nist.gov/vuln/detail/CVE-2026-49933"},
+    {"id": "Android-2026-10-05-批次", "name": "Google Android 2026 年 10 月公告批次(含多条本地提权)", "product": "Android 14/15/16/16-qpr2/17", "affected": "早于 2026-10-05 补丁版本", "severity": "varying", "summary": "2026-10-05 公告含 RCE/提权/信息泄露，代表 CVE:2026-28667/45513/45516/45524/49878/49880/49885/49933/49937/55265/55266/55269/55270/55279/55280/55286/58815/58834/58835/58841/58854/58856/58859/58865/58880。", "detect": "补丁日期早于 2026-10-05 即受影响。", "remediate": "安装 2026-10 补丁；OPPO/一加跟随 OSRC 对应批次。", "ref": "https://source.android.google.cn/docs/security/bulletin/2026/2026-10-01"}
   ]
 }
